@@ -15,15 +15,16 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Lucas Carvalho
  */
-@WebServlet(name = "CadastraNotasServlet", urlPatterns = {"/CadastraNotasServlet"})
+@WebServlet("/CadastraNotasServlet")
 public class CadastraNotasServlet extends HttpServlet {
  ArrayList <Aluno> bobaes = new ArrayList <Aluno>();
  
  @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
   
         try{
-            boolean nota1t, trabalhot, frequenciat, projetot, pft;
+            String nota1t, trabalhot, frequenciat, projetot, pft;
+            boolean nota1t1, trabalhot1, frequenciat1, projetot1, pft1;
             
             
             double nota1 = Double.parseDouble((String)req.getParameter("Nota 1"));
@@ -32,55 +33,57 @@ public class CadastraNotasServlet extends HttpServlet {
             double projeto = Double.parseDouble((String)req.getParameter("Projeto"));
             double pf = Double.parseDouble((String)req.getParameter("Prova Final"));
             double m1 = (0.7*((nota1+trabalho)/2))+(projeto*0.3);
-            String nome = (String)req.getParameter("Nome");
+            String nome = (String)req.getParameter("nome");
             String situacao;
             
           
             if(nota1>=0 && nota1 <=10){
-                nota1t=true;
-                
+                req.setAttribute("nota1t",nota1);
+                nota1t1=true;
             }else{
-                nota1t=false;
                 req.setAttribute("Errnota1","Valor da Nota deve ser entre 0 e 10");}
-                
-                
+                nota1t1 = false;
             if(trabalho>=0 && trabalho <=10){
-                trabalhot=true;
+                req.setAttribute("trabalhot",trabalho);
+                trabalhot1 = true;
                
             }else{
-                trabalhot=false;
+                
                 req.setAttribute("Errtrab","Valor do Trabalho deve ser entre 0 e 10");
+                trabalhot1=false;
             }
             
             
             if(frequencia>=0 && frequencia <=100){
-                frequenciat=true;
+                req.setAttribute("frequenciat",frequencia);
+                frequenciat1=true;
                 
             }else{
-                frequenciat=false;
-                req.setAttribute("Errfreq","Valor da Frequencia deve ser entre 0 e 10");
+                
+                req.setAttribute("Errfreq","Valor da Frequencia deve ser entre 0 e 100");
+                frequenciat1=false;
             }
             
             if(projeto>=0 && projeto <=10){
-                projetot=true;
+                req.setAttribute("projetot",projeto);
+                projetot1=true;
               
             }else{
-                projetot=false;
+                
                 req.setAttribute("Errproj","Valor do Projeto deve ser entre 0 e 10");
+                projetot1=false;
             }
             
             if(pf>=0 && pf <=10){
-                pft=true;
+                req.setAttribute("pft",pf);
+                pft1=true;
                
             }else{
-                pft=false;
-                req.setAttribute("Errpf","Valor da PF deve ser entre 0 e 10");
-            }
                 
-            
-            
-            
-            
+                req.setAttribute("Errpf","Valor da PF deve ser entre 0 e 10");
+                pft1=false;
+            }
+
             if(frequencia >= 75){
                 if(m1 >=7){
                     situacao = "Aprovado";
@@ -101,18 +104,25 @@ public class CadastraNotasServlet extends HttpServlet {
                 situacao = "Reprovado";
             }
             
-            if(nota1t && trabalhot && frequenciat && projetot && pft){
+            Aluno bobao1 = new Aluno(nome,nota1,trabalho,projeto,frequencia,pf,situacao);
+            bobaes.add(bobao1);
+            req.setAttribute("bobaes",bobaes);
+            //req.getRequestDispatcher("tabelinha.jsp").forward(req, resp);
+            
+            
+            if(nota1t1 && trabalhot1 && frequenciat1 && projetot1 && pft1){
+                
             Aluno bobao = new Aluno(nome,nota1,trabalho,projeto,frequencia,pf,situacao);
             bobaes.add(bobao);
             req.setAttribute("bobaes",bobaes);
-            req.getRequestDispatcher("TabelaAlunos.jsp").forward(req, resp);
+            req.getRequestDispatcher("tabelinha.jsp").forward(req, resp);
+            
             }else{
                 
                 req.getRequestDispatcher("index.jsp").forward(req,resp);
             }
            
-            
-           
+          
         }
         catch(Exception e){
             
@@ -124,10 +134,8 @@ public class CadastraNotasServlet extends HttpServlet {
      
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp); 
-    }
+    
+   
    
     
     

@@ -50,7 +50,7 @@ public class ServletLogin extends HttpServlet {
         
         
                  if(login.equals(loginCerto) && senha.equals(senhaCerta)){
-                     req.getRequestDispatcher("/index.html").forward(req, resp);
+                     req.getRequestDispatcher("/index.jsp").forward(req, resp);
             
                  }
                  else{
