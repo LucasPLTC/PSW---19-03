@@ -35,7 +35,7 @@
                         <td>${ bobo.trabalho }</td>
                         <td>${ bobo.projeto }</td>
                         <td>${ bobo.frequencia }</td>
-                        <td>${ bobo.pf }</td>
+                        <td>${ bobo.prova_final }</td>
                         <td>${ bobo.situacao }</td>
                     </tr>
                 </c:forEach>
